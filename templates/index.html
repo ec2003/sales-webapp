@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        <a href="{% url 'product_detail' product.pk %}">
+            <!-- Assuming image name matches product ID for simplicity based on schema constraints -->
+            <img src="{% static 'img/product/' %}{{ product.id }}.jpg" alt="{{ product.product_name }}">
+            <h3>{{ product.product_name }}</h3>
+            <p class="price">{{ product.price }} VND</p>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

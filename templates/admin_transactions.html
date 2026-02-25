@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Quản lý đơn hàng</h2>
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>SĐT</th>
+            <th>Sản phẩm</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for trans in transactions %}
+        <tr>
+            <td>{{ trans.id }}</td>
+            <td>{{ trans.phone_number }}</td>
+            <td>
+                {% for pt in trans.producttransaction_set.all %}
+                    {{ pt.product }} (x{{ pt.product_count }})<br>
+                {% endfor %}
+            </td>
+            <td>{% if trans.is_confirmed %}Đã xác nhận{% else %}Chờ xác nhận{% endif %}</td>
+            <td>
+                {% if not trans.is_confirmed %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="transaction_id" value="{{ trans.id }}">
+                    <button type="submit">Xác nhận</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

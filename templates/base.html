@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cửa Hàng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{% url 'index' %}">
+                    <!-- Assuming logo.png exists in static/img/product/ as per requirement context -->
+                    <img src="{% static 'img/product/logo.png' %}" alt="Logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'index' %}">Trang chủ</a>
+                <a href="{% url 'payment' %}">Giỏ hàng</a>
+                <a href="{% url 'admin_transactions' %}">Admin</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="social-media">
+            <h3>Theo dõi chúng tôi</h3>
+            <a href="#">Facebook Fanpage</a> | 
+            <a href="#">TikTok Page</a>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="payment-page">
+    <h2>Thanh Toán</h2>
+    
+    <div class="payment-container">
+        <div class="qr-section">
+            <img src="{% static 'img/banking/qr.jpg' %}" alt="QR Payment">
+            <p>Quét mã để thanh toán</p>
+        </div>
+        
+        <div class="order-summary">
+            <h3>Đơn hàng của bạn</h3>
+            <table>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Hành động</th>
+                </tr>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.product_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.total }} VND</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.product.id %}" class="btn-remove">Xóa</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p class="total"><strong>Tổng cộng: {{ total_price }} VND</strong></p>
+            
+            <form method="post" class="payment-form">
+                {% csrf_token %}
+                <label for="phone">Số điện thoại xác nhận:</label>
+                <input type="text" id="phone" name="phone_number" required placeholder="Nhập số điện thoại">
+                <button type="submit" class="btn-confirm">Xác nhận thanh toán</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
