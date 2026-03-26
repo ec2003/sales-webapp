@@ -349,3 +349,34 @@ footer a:hover {
 .btn-remove:hover {
     background-color: #fee2e2;
 }
+
+/* Filters for Admin Page */
+.filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filters a {
+    padding: 0.5rem 1rem;
+    background: #e2e8f0;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.filters a:hover {
+    background: #cbd5e1;
+}
+
+.filters a.active {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+
+.revenue {
+    margin: 2rem 0;
+}
+

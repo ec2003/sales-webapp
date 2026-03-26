@@ -3,13 +3,19 @@
 
 {% block content %}
 <div class="product-grid">
-    {% for product in products %}
+    {% for item in products_with_discount %}
     <div class="product-card">
-        <a href="{% url 'product_detail' product.pk %}">
-            <!-- Assuming image name matches product ID for simplicity based on schema constraints -->
-            <img src="{% static 'img/product/' %}{{ product.id }}.jpg" alt="{{ product.product_name }}">
-            <h3>{{ product.product_name }}</h3>
-            <p class="price">{{ product.price }} VND</p>
+        <a href="{% url 'product_detail' item.product.pk %}">
+            <img src="{% static 'img/product/' %}{{ item.product.id }}.jpg" alt="{{ item.product.product_name }}">
+            <h3>{{ item.product.product_name }}</h3>
+            {% if show_promo and item.discounted_price %}
+                <p class="price">
+                    <span style="text-decoration: line-through;">{{ item.product.price|floatformat:0 }} VND</span>
+                    <span style="color: red;">{{ item.discounted_price|floatformat:0 }} VND</span>
+                </p>
+            {% else %}
+                <p class="price">{{ item.product.price|floatformat:0 }} VND</p>
+            {% endif %}
         </a>
     </div>
     {% endfor %}

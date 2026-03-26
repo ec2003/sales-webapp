@@ -1,14 +1,56 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.contrib import messages
 from .models import Product, Transaction, ProductTransaction
 from django.contrib.auth.decorators import user_passes_test
+from django.utils import timezone
+
+def about(request):
+    transaction_count = Transaction.objects.count()
+    show_promo_popup = False
+    if transaction_count <= 100 and not request.session.get('promo_popup_shown'):
+        show_promo_popup = True
+        request.session['promo_popup_shown'] = True
+    return render(request, 'about.html', {'show_promo_popup': show_promo_popup})
 
 def index(request):
     products = Product.objects.all()
-    return render(request, 'index.html', {'products': products})
+    transaction_count = Transaction.objects.count()
+    show_promo_popup = False
+    if transaction_count <= 100 and not request.session.get('promo_popup_shown'):
+        show_promo_popup = True
+        request.session['promo_popup_shown'] = True
+
+    show_promo = transaction_count <= 100
+    products_with_discount = []
+    if show_promo:
+        for product in products:
+            products_with_discount.append({
+                'product': product,
+                'discounted_price': product.price * 0.7
+            })
+    else:
+        for product in products:
+            products_with_discount.append({
+                'product': product,
+                'discounted_price': None
+            })
+
+    return render(request, 'index.html', {
+        'products_with_discount': products_with_discount, 
+        'show_promo_popup': show_promo_popup,
+        'show_promo': show_promo
+    })
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
+    transaction_count = Transaction.objects.count()
+    show_promo = transaction_count <= 100
+    
+    discounted_price = None
+    if show_promo:
+        discounted_price = product.price * 0.7
+
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
         cart = request.session.get('cart', {})
@@ -23,7 +65,11 @@ def product_detail(request, pk):
         messages.success(request, f"Đã thêm {quantity} {product.product_name} vào giỏ hàng.")
         return redirect('index')
         
-    return render(request, 'product_detail.html', {'product': product})
+    return render(request, 'product_detail.html', {
+        'product': product,
+        'show_promo': show_promo,
+        'discounted_price': discounted_price
+    })
 
 def payment(request):
     cart = request.session.get('cart', {})
@@ -33,8 +79,11 @@ def payment(request):
 
     cart_items = []
     total_price = 0
+    total_discounted_price = 0
     
-    # Retrieve product details for items in cart
+    transaction_count = Transaction.objects.count()
+    show_promo = transaction_count <= 100
+
     products = Product.objects.filter(pk__in=[int(k) for k in cart.keys()])
     product_map = {str(p.id): p for p in products}
 
@@ -43,19 +92,26 @@ def payment(request):
             product = product_map[p_id]
             total = product.price * quantity
             total_price += total
-            cart_items.append({
+            
+            item = {
                 'product': product,
                 'quantity': quantity,
-                'total': total
-            })
+                'total': total,
+                'discounted_total': None
+            }
+            
+            if show_promo:
+                discounted_total = total * 0.7
+                item['discounted_total'] = discounted_total
+                total_discounted_price += discounted_total
+            
+            cart_items.append(item)
 
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
         if phone_number:
-            # Create Transaction
             transaction = Transaction.objects.create(phone_number=phone_number)
             
-            # Create Product_Transaction records
             for item in cart_items:
                 ProductTransaction.objects.create(
                     transaction=transaction,
@@ -63,14 +119,15 @@ def payment(request):
                     product_count=item['quantity']
                 )
             
-            # Clear cart
             del request.session['cart']
             messages.success(request, "Thanh toán thành công! Đang chờ admin xác nhận.")
             return redirect('index')
 
     return render(request, 'payment.html', {
         'cart_items': cart_items,
-        'total_price': total_price
+        'total_price': total_price,
+        'total_discounted_price': total_discounted_price if show_promo else None,
+        'show_promo': show_promo
     })
 
 from django.contrib.auth.decorators import user_passes_test
@@ -78,6 +135,7 @@ from django.contrib.auth.decorators import user_passes_test
 @user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
 def admin_transactions(request):
     # Simple admin view to confirm transactions
+    
     if request.method == 'POST':
         transaction_id = request.POST.get('transaction_id')
         try:
@@ -88,8 +146,40 @@ def admin_transactions(request):
         except Transaction.DoesNotExist:
             pass
     
-    transactions = Transaction.objects.all().order_by('-created_at')
-    return render(request, 'admin_transactions.html', {'transactions': transactions})
+    transactions = Transaction.objects.all()
+    period = request.GET.get('period')
+    now = timezone.now()
+
+    if period == 'day':
+        transactions = transactions.filter(created_at__date=now.date())
+    elif period == 'month':
+        transactions = transactions.filter(created_at__year=now.year, created_at__month=now.month)
+    elif period == 'year':
+        transactions = transactions.filter(created_at__year=now.year)
+    
+    transactions = transactions.order_by('-created_at')
+
+    # Calculate total revenue from confirmed transactions
+    total_revenue = 0
+    confirmed_transactions = transactions.filter(is_confirmed=True)
+
+    # Inefficient, but required by current model structure
+    product_prices = {p.product_name: p.price for p in Product.objects.all()}
+
+    for trans in confirmed_transactions:
+        for pt in trans.producttransaction_set.all():
+            # if pt.product in product_prices:
+            #     total_revenue += product_prices[pt.product] * pt.product_count
+            if trans not in Transaction.objects.order_by('-created_at')[:100]:
+                total_revenue += product_prices.get(pt.product, 0) * pt.product_count
+            else:
+                total_revenue += product_prices.get(pt.product, 0) * pt.product_count * 0.7
+    
+    return render(request, 'admin_transactions.html', {
+        'transactions': transactions,
+        'total_revenue': total_revenue,
+        'current_period': period
+        })
 
 def remove_from_cart(request, product_id):
     cart = request.session.get('cart', {})
