@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Quản lý sản phẩm</h2>
+        <a href="{% url 'add_product' %}" class="btn btn-primary">Thêm Sản Phẩm Mới</a>
+    </div>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Ảnh</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá</th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.product_name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% endif %}
+                </td>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.price|floatformat:0 }} VND</td>
+                <td>
+                    
+                    <button type="submit"><a href="{% url 'edit_product' product.pk %}" class="btn btn-sm btn-info">Sửa</a></button>
+                    <form method="post" action="{% url 'delete_product' product.pk %}" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

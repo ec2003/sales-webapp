@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Quản lý đơn hàng</h2>
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>Quản lý đơn hàng</h2>
+    <a href="{% url 'admin_products' %}" class="btn btn-primary">Quản lý sản phẩm</a>
+</div>
 
 <div class="filters">
     <a href="?period=day" class="{% if current_period == 'day' %}active{% endif %}">Hôm nay</a>
@@ -39,12 +42,21 @@
             <td>{% if trans.is_confirmed %}Đã xác nhận{% else %}Chờ xác nhận{% endif %}</td>
             <td>
                 {% if not trans.is_confirmed %}
-                <form method="post" action="{% url 'admin_transactions' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="transaction_id" value="{{ trans.id }}">
-                    <button type="submit">Xác nhận</button>
-                </form>
+                    <form method="post" action="{% url 'admin_transactions' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="transaction_id" value="{{ trans.id }}">
+                        <button type="submit">Xác nhận</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'revert_transaction' trans.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit">Hoàn tác</button>
+                    </form>
                 {% endif %}
+                <form method="post" action="{% url 'delete_transaction' trans.id %}" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này?');">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Xóa</button>
+                </form>
             </td>
         </tr>
         {% empty %}

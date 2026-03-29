@@ -6,7 +6,9 @@
     {% for item in products_with_discount %}
     <div class="product-card">
         <a href="{% url 'product_detail' item.product.pk %}">
-            <img src="{% static 'img/product/' %}{{ item.product.id }}.jpg" alt="{{ item.product.product_name }}">
+            {% if item.product.image %}
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.product_name }}">
+            {% endif %}
             <h3>{{ item.product.product_name }}</h3>
             {% if show_promo and item.discounted_price %}
                 <p class="price">

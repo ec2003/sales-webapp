@@ -4,7 +4,9 @@
 {% block content %}
 <div class="product-detail">
     <div class="product-image">
-        <img src="{% static 'img/product/' %}{{ product.id }}.jpg" alt="{{ product.product_name }}">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+        {% endif %}
     </div>
     <div class="product-info">
         <h1>{{ product.product_name }}</h1>
@@ -12,6 +14,10 @@
             <p class="price"><span style="text-decoration: line-through;">{{ product.price|floatformat:0 }} VND</span> <span style="color: red;">{{ discounted_price|floatformat:0 }} VND</span></p>
         {% else %}
             <p class="price">{{ product.price|floatformat:0 }} VND</p>
+        {% endif %}
+        
+        {% if product.description %}
+            <p>{{ product.description }}</p>
         {% endif %}
         
         <form method="post" action="">

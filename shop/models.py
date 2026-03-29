@@ -4,6 +4,8 @@ import uuid
 class Product(models.Model):
     product_name = models.CharField(max_length=255)
     price = models.IntegerField()
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
 
     def __str__(self):
         return self.product_name

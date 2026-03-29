@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<div class="container mt-5">
+    <div class="form-container">
+        <h2 class="form-header">Chỉnh sửa Sản Phẩm</h2>
+        <form method="post" enctype="multipart/form-data" class="product-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="product_name">Tên Sản Phẩm: </label>
+                <br>
+                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ product.product_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Giá: </label>
+                <br>
+                <input type="number" class="form-control" id="price" name="price" value="{{ product.price }}" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Mô tả: </label>
+                <br>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ product.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Ảnh Sản Phẩm: </label>
+                {% if product.image %}
+                    <p class="current-image-text">Ảnh hiện tại: <a href="{{ product.image.url }}">{{ product.image.name }}</a></p>
+                {% endif %}
+                <input type="file" class="form-control-file" id="image" name="image">
+            </div>
+            <div class="form-footer">
+                <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
