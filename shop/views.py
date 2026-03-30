@@ -112,12 +112,16 @@ def payment(request):
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number')
         if phone_number:
-            transaction = Transaction.objects.create(phone_number=phone_number)
+            transaction = Transaction.objects.create(
+                phone_number=phone_number,
+                is_confirmed=False,
+                revenue=0
+            )
             
             for item in cart_items:
                 ProductTransaction.objects.create(
                     transaction=transaction,
-                    product=item['product'].product_name,
+                    product=item['product'],
                     product_count=item['quantity']
                 )
             
@@ -165,17 +169,7 @@ def admin_transactions(request):
     total_revenue = 0
     confirmed_transactions = transactions.filter(is_confirmed=True)
 
-    # Inefficient, but required by current model structure
-    product_prices = {p.product_name: p.price for p in Product.objects.all()}
-
-    for trans in confirmed_transactions:
-        for pt in trans.producttransaction_set.all():
-            # if pt.product in product_prices:
-            #     total_revenue += product_prices[pt.product] * pt.product_count
-            if trans not in Transaction.objects.order_by('-created_at')[:100]:
-                total_revenue += product_prices.get(pt.product, 0) * pt.product_count
-            else:
-                total_revenue += product_prices.get(pt.product, 0) * pt.product_count * 0.7
+    total_revenue = sum(trans.revenue for trans in confirmed_transactions)
     
     return render(request, 'admin_transactions.html', {
         'transactions': transactions,
@@ -258,3 +252,73 @@ def delete_product(request, pk):
         return redirect('admin_products')
     # Redirect to product list if not a POST request
     return redirect('admin_products')
+
+@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+def extract_revenue_report_excel(request):
+    import openpyxl
+    from django.http import HttpResponse
+    from django.utils.dateparse import parse_date
+
+    today_only = request.GET.get('today') == '1'
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    if today_only:
+        today = timezone.localtime().date()
+        start_date = today
+        end_date = today
+    else:
+        if not start_date_str or not end_date_str:
+            messages.error(request, 'Vui lòng chọn cả ngày bắt đầu và ngày kết thúc để xuất báo cáo.')
+            return redirect('admin_transactions')
+
+        start_date = parse_date(start_date_str)
+        end_date = parse_date(end_date_str)
+
+        if not start_date or not end_date:
+            messages.error(request, 'Ngày không hợp lệ.')
+            return redirect('admin_transactions')
+
+        if start_date > end_date:
+            messages.error(request, 'Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc.')
+            return redirect('admin_transactions')
+
+    transactions = Transaction.objects.filter(
+        created_at__date__gte=start_date,
+        created_at__date__lte=end_date,
+        is_confirmed=True
+    ).order_by('created_at')
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = f"Doanh Thu {start_date} - {end_date}"
+
+    headers = ['ID', 'Thời gian', 'Số điện thoại', 'Sản phẩm', 'Doanh thu']
+    sheet.append(headers)
+
+    total_revenue = 0
+
+    for transaction in transactions:
+        products_list = ", ".join([
+            f"{pt.product.product_name} (x{pt.product_count})"
+            for pt in transaction.producttransaction_set.all()
+        ])
+
+        local_created_at = timezone.localtime(transaction.created_at)
+        sheet.append([
+            str(transaction.id),
+            local_created_at.strftime('%d/%m/%Y %H:%M'),
+            transaction.phone_number,
+            products_list,
+            transaction.revenue,
+        ])
+
+        total_revenue += transaction.revenue or 0
+
+    sheet.append(['', '', '', 'Tổng doanh thu', total_revenue])
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    file_name = f'doanh_thu_{start_date}_{end_date}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+    workbook.save(response)
+    return response

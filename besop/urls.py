@@ -7,6 +7,7 @@ urlpatterns = [
     path('product/<int:pk>/', views.product_detail, name='product_detail'),
     path('payment/', views.payment, name='payment'),
     path('quan-ly/', views.admin_transactions, name='admin_transactions'),
+    path('quan-ly/export/', views.extract_revenue_report_excel, name='extract_revenue_report_excel'),
     path('quan-ly/add-product/', views.add_product, name='add_product'),
     path('quan-ly/edit-product/<int:pk>/', views.edit_product, name='edit_product'),
     path('quan-ly/products/', views.admin_products, name='admin_products'),
