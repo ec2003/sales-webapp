@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+.leadership-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.member-card {
+    background-color: #f87516;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+}
+.member-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.member-info {
+    padding: 20px;
+    color: black;
+}
+.member-info h3 {
+    margin-top: 0;
+}
+</style>
+
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 20px;">Thành viên chủ chốt</h1>
+    <div class="leadership-container">
+        <div class="member-card">
+            <img src="{% static 'img/member/1.jpg' %}">
+            <div class="member-info">
+                <h3>Nguyễn Ngọc Phong</h3>
+                <p>Tổng Giám đốc Điều hành (CEO)</p>
+            </div>
+        </div>
+    </div>
+    <div class="leadership-container">
+        <div class="member-card">
+            <img src="{% static 'img/member/2.jpg' %}" alt="">
+            <div class="member-info">
+                <h3>Đào Xuân Gia Khang</h3>
+                <p>Trưởng phòng Sản xuất & Chuỗi Cung ứng</p>
+            </div>
+        </div>
+    </div>
+    <div class="leadership-container">
+        <div class="member-card">
+            <img src="{% static 'img/member/3.jpg' %}" alt="">
+            <div class="member-info">
+                <h3>Lương Quỳnh Anh</h3>
+                <p>Trưởng phòng Thiết kế</p>
+            </div>
+        </div>
+    </div>
+    <div class="leadership-container">
+        <div class="member-card">
+            <img src="{% static 'img/member/4.jpg' %}" alt="">
+            <div class="member-info">
+                <h3>Nguyễn Xuân Huy</h3>
+                <p>Trưởng phòng Tài chính</p>
+            </div>
+        </div>
+    </div>
+    <div class="leadership-container">
+        <div class="member-card">
+            <img src="{% static 'img/member/5.jpg' %}" alt="">
+            <div class="member-info">
+                <h3>Nguyễn Quỳnh Bảo Hân</h3>
+                <p>Trưởng phòng Marketing</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

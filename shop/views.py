@@ -12,7 +12,16 @@ def about(request):
     # if transaction_count <= 100 and not request.session.get('promo_popup_shown'):
         # show_promo_popup = True
         # request.session['promo_popup_shown'] = True
-    return render(request, 'about.html', {'show_promo_popup': show_promo_popup})
+    return render(request, 'about-summary.html', {'show_promo_popup': show_promo_popup})
+
+def about_leadership(request):
+    return render(request, 'about-leadership.html')
+
+def about_news(request):
+    return render(request, 'about-news.html')
+
+def about_articles(request):
+    return render(request, 'about-articles.html')
 
 def index(request):
     products = Product.objects.all()

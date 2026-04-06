@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .news-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .article-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .article-card img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .article-info {
+        padding: 20px;
+    }
+
+    .article-info h3 {
+        margin-top: 0;
+    }
+</style>
+
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 20px;">Bài viết</h1>
+    <div class="news-container">
+        <div class="article-card">
+            <img src="{% static 'img/articles/1.jpg' %}">
+            <div class="article-info">
+                <h3>BESOP: HÀNH TRÌNH TỐI ƯU HÓA NÔNG SẢN CỦA HỌC SINH THPT PLEIKU
+                    [GIA LAI]</h3>
+                <p>Nhóm khởi nghiệp BESOP (Beyond Starch Optimization) từ trường THPT Pleiku vừa tổ chức thành công buổi
+                    trải nghiệm sản phẩm, đánh dấu bước chuyển mình từ ý tưởng học đường sang thực tiễn thị trường.</p>
+                <h4>1. Tư duy "Beyond Standard" (Vượt trên chuẩn mực)</h4>
+                <p>Không dừng lại ở việc bán nông sản thô, BESOP tập trung vào chế biến sâu khoai lang Phú Thiện. Dự án
+                    giải quyết đồng thời hai bài toán: nâng cao giá trị thặng dư cho nông sản địa phương và tối ưu hóa
+                    hàm lượng dinh dưỡng (tinh bột kháng) cho người tiêu dùng hiện đại.</p>
+                <h4>2. Trải nghiệm khách hàng là "kim chỉ nam"</h4>
+                <p>Tại buổi dùng thử, BESOP ghi điểm nhờ sự chuyên nghiệp:</p>
+                <ul>
+                    <li>Sản phẩm: Đóng gói chỉn chu, tem nhãn nhận diện thương hiệu rõ ràng (Logo BESOP x THPT Pleiku).
+                    </li>
+                    <li>Tương tác: Nhóm trực tiếp đối thoại, thu thập dữ liệu phản hồi (Feedback) để tinh chỉnh khẩu vị
+                        và bao bì – một tư duy vận hành startup bài bản.</li>
+
+                </ul>
+                <h4>3. Tầm vóc khởi nghiệp trẻ</h4>
+                <p>Sự kiện khẳng định bản lĩnh của học sinh THPT Pleiku: dám nghĩ lớn, làm thật. BESOP không chỉ là một
+                    dự án thi cử, mà là mô hình kinh tế tiềm năng, kết nối tri thức học đường với dòng chảy nông nghiệp
+                    số tại Gia Lai.</p>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="news-container">
+        <div class="article-card">
+            <img src="{% static 'img/articles/2.jpg' %}">
+            <div class="article-info">
+                <h3>STARTUP BESOP: HÀNH TRÌNH TỐI ƯU HÓA NÔNG SẢN CỦA HỌC SINH THPT PLEIKU [GIA LAI]</h3>
+                <p>ước ra khỏi lý thuyết học đường, nhóm học sinh trường THPT Pleiku với dự án BESOP (Beyond Standard
+                    Optimization) đã trực tiếp đưa giải pháp tối ưu hóa về cánh đồng Chư A Thai, Phú Thiện. Đây là mô
+                    hình khởi nghiệp trẻ đầy triển vọng, kết hợp giữa tri thức số và giá trị nông nghiệp bản địa.</p>
+                <h4>Tư duy "Vượt trên tiêu chuẩn" (Beyond Standard)</h4>
+                <p>Không chỉ dừng lại ở ý tưởng, BESOP triển khai bộ giải pháp thực tế giúp thay đổi phương thức canh
+                    tác truyền thống:</p>
+                <ul>
+                    <li><b>Số hóa quản trị:</b> Hỗ trợ nông dân quản lý chi phí và quy trình qua các công cụ số đơn
+                        giản.</li>
+                    <li>
+                        <b>Kỹ thuật tối ưu:</b> Điều chỉnh định lượng phân bón, nước tưới dựa trên dữ liệu, giúp tiết
+                        giảm chi
+                        phí đầu vào.
+                    </li>
+                    <li>
+                        <b>Kết nối thị trường:</b> Đưa nông sản Chư A Thai tiếp cận cộng đồng trẻ và các nền tảng thương
+                        mại
+                        điện tử.
+                    </li>
+                </ul>
+                <h4>Khởi nghiệp từ trách nhiệm xã hội</h4>
+                <p>Dự án ghi điểm bởi sự chuyên nghiệp và tinh thần "Học đi đôi với hành". BESOP không chỉ tối ưu hóa
+                    lợi nhuận mà còn tối ưu hóa sức lao động cho bà con nông dân. Như đại diện nhóm chia sẻ: "Chúng em
+                    khởi nghiệp để tạo ra giá trị thực chất cho cộng đồng, không chỉ là một dự án để đi thi."</p>
+                <h4>Tầm nhìn bền vững</h4>
+                <p>Sự hiện diện của BESOP tại Chư A Thai là minh chứng cho bản lĩnh của học sinh Gia Lai: dám nghĩ lớn,
+                    làm thật và dấn thân vì quê hương. Dự án hiện là điểm sáng trong phong trào khởi nghiệp học đường,
+                    mở ra hướng đi mới cho nông nghiệp thông minh tại địa phương.</p>
+                </p>
+                <div style="text-align: center;">
+                    <p>Dự án BESOP - Beyond Standard Optimization</p>
+                    <p>Đơn vị: Nhóm học sinh trường THPT Pleiku</p>
+                    <p>Website: <a href="https://besop.pythonanywhere.com/">https://besop.pythonanywhere.com/</a></p>
+                    <p>Email: xuanhuy1980gl@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+{% endblock %}

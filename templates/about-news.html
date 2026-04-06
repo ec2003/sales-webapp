@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+.news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+.article-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.article-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.article-info {
+    padding: 20px;
+}
+.article-info h3 {
+    margin-top: 0;
+}
+</style>
+
+<div class="container">
+    <h1 style="text-align: center; margin-bottom: 20px;">Tin tức</h1>
+    <div class="news-container">
+        <div class="article-card">
+            <a href="https://baogialai.com.vn/hoc-sinh-gia-lai-doi-moi-sang-tao-nang-tam-nong-san-dia-phuong-post583700.html"><img src="{% static 'img/news/4.jpg' %}"></a>
+            <div class="article-info">
+                <h3>Học sinh Gia Lai đổi mới sáng tạo, nâng tầm nông sản địa phương</h3>
+                <p>Dự án “BESOP - Pleiku Beyond Starch Optimization/Sức trẻ Gia Lai - Kiến tạo giá trị nông sản Việt” của nhóm học sinh Trường THPT Pleiku vừa xuất sắc lọt vào vòng chung kết cuộc thi “Học sinh, sinh viên với ý tưởng khởi nghiệp” lần thứ VIII.
+                </p>
+                <a href="https://baogialai.com.vn/hoc-sinh-gia-lai-doi-moi-sang-tao-nang-tam-nong-san-dia-phuong-post583700.html" target="_blank">Đọc thêm</a>
+            </div>
+            </div>
+            <div class="article-card">
+            <a href="https://baogialai.com.vn/gia-lai-co-1-du-an-vao-chung-ket-cuoc-thi-hoc-sinh-sinh-vien-voi-y-tuong-khoi-nghiep-post583099.html"><img src="{% static 'img/news/1.jpg' %}"></a>
+            <div class="article-info">
+                <h3>Gia Lai có 1 dự án vào chung kết cuộc thi “Học sinh, sinh viên với ý tưởng khởi nghiệp”</h3>
+                <p>Ngày 23-3-2026, Bộ Giáo dục và Đào tạo công bố danh sách 135 dự án lọt vào vòng chung kết cuộc thi “Học sinh, sinh viên với ý tưởng khởi nghiệp” (SV_STARTUP) lần thứ VIII. Trong đó, Gia Lai có 1 đại diện góp mặt đến từ Trường THPT Pleiku.
+
+                    Dự án “BESOP - Pleiku Beyond Starch Optimization / Sức trẻ Gia Lai - Kiến tạo giá trị nông sản Việt” đã xuất sắc lọt vào vòng chung kết.
+                </p>
+                <a href="https://baogialai.com.vn/gia-lai-co-1-du-an-vao-chung-ket-cuoc-thi-hoc-sinh-sinh-vien-voi-y-tuong-khoi-nghiep-post583099.html" target="_blank">Đọc thêm</a>
+            </div>
+            </div>
+</div>
+{% endblock %}
