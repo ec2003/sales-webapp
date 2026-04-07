@@ -4,6 +4,9 @@ from django.contrib import messages
 from .models import Product, Transaction, ProductTransaction
 from django.contrib.auth.decorators import user_passes_test
 from django.utils import timezone
+from django.utils.dateparse import parse_date
+import openpyxl
+from django.http import HttpResponse
 
 def about(request):
     transaction_count = Transaction.objects.count()
@@ -169,14 +172,30 @@ def admin_transactions(request):
     
     transactions = Transaction.objects.all()
     period = request.GET.get('period')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
     now = timezone.now()
 
+    # Apply period filter
     if period == 'day':
         transactions = transactions.filter(created_at__date=now.date())
     elif period == 'month':
         transactions = transactions.filter(created_at__year=now.year, created_at__month=now.month)
     elif period == 'year':
         transactions = transactions.filter(created_at__year=now.year)
+    
+    # Apply datetime range filter
+    if start_date:
+    
+        parsed_start = parse_date(start_date)
+        if parsed_start:
+            transactions = transactions.filter(created_at__date__gte=parsed_start)
+    
+    if end_date:
+    
+        parsed_end = parse_date(end_date)
+        if parsed_end:
+            transactions = transactions.filter(created_at__date__lte=parsed_end)
     
     transactions = transactions.order_by('-created_at')
 
@@ -189,7 +208,9 @@ def admin_transactions(request):
     return render(request, 'admin_transactions.html', {
         'transactions': transactions,
         'total_revenue': total_revenue,
-        'current_period': period
+        'current_period': period,
+        'start_date': start_date,
+        'end_date': end_date
         })
 
 @user_passes_test(is_admin)
@@ -270,9 +291,8 @@ def delete_product(request, pk):
 
 @user_passes_test(is_admin)
 def extract_revenue_report_excel(request):
-    import openpyxl
-    from django.http import HttpResponse
-    from django.utils.dateparse import parse_date
+    
+
 
     today_only = request.GET.get('today') == '1'
     start_date_str = request.GET.get('start_date')

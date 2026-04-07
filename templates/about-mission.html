@@ -9,33 +9,37 @@
         padding: 2rem 1rem;
     } */
 
-    .news-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        padding: 20px;
-    }
+.article-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
 
-    .article-card {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .article-card img {
-        width: 100%;
-        height: 500px;
-        object-fit: cover;
-    }
-
-    .article-info {
-        padding: 20px;
-    }
-
-    .article-info h3 {
-        margin-top: 0;
-    }
+.article-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+.article-card img {
+    width: 35%;
+    max-width: 300px;
+    height: auto;
+    object-fit: cover;
+}
+.article-info {
+    width: 65%;
+    padding: 20px;
+    color: black;
+    text-align: left;
+}
+.article-info h3 {
+    margin-top: 0;
+}
     .top-img-container {
         display: flex;
         justify-content: center;
@@ -50,31 +54,172 @@
         height: auto;
         border-radius: 8px;
     }
-</style>
+    .pdf-container {
+        display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    }
+    .pdf-card embed {
+        width: 60%;
+    height: auto;
+    object-fit: cover;
+    }
+
+    .pdf-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+    }
+
+    .pdf-container-info {
+    width: 40%;
+    padding: 20px;
+    color: black;
+    text-align: left;
+    }
+    .pdf-container-info h3 {
+        margin-top: 0;
+    }
+    /* Responsive Mobile Mode */
+@media screen and (max-width: 768px) {
+    .product-grid { grid-template-columns: 1fr; }
+    .product-detail { flex-direction: column; padding: 1.5rem; }
+    .payment-container { flex-direction: column; padding: 1.5rem; }
+    .navbar { flex-direction: column; gap: 1rem; }
+    .product-detail img { max-width: 100%; }
+
+    embed {
+        display: none;
+    }
+
+    .article-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+.article-card img {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.article-info {
+    width: auto;
+    padding: 20px;
+    color: black;
+    text-align: left;
+}
+.article-info h3 {
+    margin-top: 0;
+}
+
+    .pdf-container {
+        display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    }
+
+    .pdf-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    }
+
+    .pdf-container-info {
+    width: auto;
+    padding: 20px;
+    color: black;
+    text-align: left;
+    }
+    .pdf-container-info h3 {
+        margin-top: 0;
+    }
+}
+    </style>
 
 
 <div class="container">
     <div class="top-img-container">
         <img src="{% static 'img/mission/top.jpg' %}" alt="Mission Image">
     </div>
-    <div class="news-container">
+    <div class="article-container">
         <div class="article-card">
-            <img src="">
+            <img src="{% static 'img/mission/social.jpg' %}">
             <div class="article-info">
-                
+                <h3>GIÁ TRỊ ĐỐI VỚI XÃ HỘI</h3>
+                <p>“Tinh bột kháng mang lại nhiều giá trị thiết thực cho xã hội, đặc biệt trong bối cảnh người tiêu dùng ngày càng quan tâm đến sức khỏe và thực phẩm bền vững</p>
+                <ul>
+                    <li>Cải thiện sức khỏe cộng đồng</li>
+                    <li>Giảm chi phí y tế</li>
+                    <li>Đồng thời góp phần phát triển nông nghiệp bền vững</li>
+                    <li>Thúc đẩy ngành công nghiệp chức năng</li>
+                </ul>
+                <p>Tinh bột kháng không chỉ cải thiện sức khỏe cộng đồng mà còn giúp giảm chi phí y tế, hạn chế lãng phí nông sản và thúc đẩy phát triển kinh tế bền vững cho xã hội.”</p>
             </div>
         </div>
     </div>
-    <div class="news-container">
+    <div class="article-container">
         <div class="article-card">
-            <img src="">
+            <img src="{% static 'img/mission/environment.jpeg' %}">
             <div class="article-info">
-                
+                <h3>GIÁ TRỊ ĐỐI VỚI MÔI TRƯỜNG</h3>
+                <p>“Giá trị mà tinh bột kháng mang lại cho môi trường bao gồm : (Thêm lời để nói thuận miệng + nghe không bị cấn)</p>
+                <ul>
+                    <li>Giảm lãng phí nông sản </li>
+                    <li>Giảm rác thải & khí nhà kính</li>
+                    <li>Tiết kiệm tài nguyên (nước, đất)</li>
+                    <li>Thúc đẩy kinh tế tuần hoàn</li>
+                    <li>Hướng tới sản xuất thực phẩm bền vững</li>
+                </ul>
+                <p>Tinh bột kháng không chỉ tốt cho sức khỏe, mà còn góp phần bảo vệ môi trường khi tận dụng nông sản bị loại bỏ, giảm rác thải thực phẩm và khí nhà kính, đồng thời thúc đẩy một mô hình sản xuất bền vững theo hướng kinh tế tuần hoàn.”</p>
             </div>
         </div>
     </div>
+    <div class="pdf-container">
+        <div class="pdf-card">
+            <div class="pdf-container-info">
+            <h3>KẾT QUẢ PHÂN TÍCH DINH DƯỠNG VÀ KHẢ NĂNG HẤP THU</h3>
+            <p>Tóm tắt thông số kỹ thuật từ báo cáo:</p>
+            <ul>
+                <li><b>Độ ẩm:</b> 18.99%</li>
+                <li><b>Tinh bột kháng (Resistant Starch - RS):</b> 40.78 g/100g</li>
+                <li><b>Tinh bột tiêu hóa nhanh (RDS):</b> 7.67 g/100g (mức độ ẩm thấp giúp bảo quản tinh bột tốt hơn).</li>
+                <li><b>Tinh bột tiêu hóa chậm (SDS):</b> 15.08 g/100g</li>
+            </ul>
+            <p>Mẫu tinh bột này có thế mạnh rất lớn về mặt dinh dưỡng chức năng (hàm lượng tinh bột kháng cực cao). Phù hợp làm thực phẩm chức năng, bún/phở thực dưỡng hoặc sản phẩm cho người tiểu đường. Độ ẩm đạt mức khá cao, khuyến khích sử dụng trong thời gian ngắn.</p>
+            <a href="{% static 'pdf/KE QUA THUC NGHIEM SGS MẪU NO.PDF' %}" target="_blank" style="color: blue">Xem chi tiết báo cáo</a>
+        </div>
+        <embed src="{% static 'pdf/KE QUA THUC NGHIEM SGS MẪU NO.PDF' %}" type="application/pdf">
+        </div>
+        <div class="pdf-card">
+            <div class="pdf-container-info">
+            <h3>KẾT QUẢ PHÂN TÍCH AMYLOSE</h3>
+            <p>Tóm tắt thông số kỹ thuật từ báo cáo:</p>
+            <ul>
+                <li><b>Amylose:</b> 26.84 g/100g.</li>
+                <li><b>Độ ẩm:</b> 7.67 g/100g (mức độ ẩm thấp giúp bảo quản tinh bột tốt hơn).</li>
+                <li><b>Tình trạng mẫu:</b> Mẫu được đựng trong bình thủy tinh, khối lượng khoảng 0.3kg.</li>
+            </ul>
+            <p>Xét về góc độ dinh dưỡng hiện đại, hàm lượng Amylose này là một tín hiệu tốt, cho thấy đây là nguồn tinh bột "chậm", có lợi cho việc kiểm soát năng lượng và sức khỏe đường ruột hơn so với các loại tinh bột tinh chế thông thường.</p>
+            <a href="{% static 'pdf/AMYLOSE MAU NO.PDF' %}" target="_blank" style="color: blue">Xem chi tiết báo cáo</a>
+        </div>
+        <embed src="{% static 'pdf/AMYLOSE MAU NO.PDF' %}" type="application/pdf">
+        </div>
 
+    </div>
 
-</div>
 </div>
 {% endblock %}

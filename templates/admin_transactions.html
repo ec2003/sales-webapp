@@ -13,21 +13,22 @@
     <a href="{% url 'admin_transactions' %}" class="{% if not current_period %}active{% endif %}">Tất cả</a>
 </div>
 
-<div style="align-content: center; display: inline-flex;">
-    <form method="get" action="{% url 'extract_revenue_report_excel' %}" class="export-form" style="margin: 1rem 0; display:flex; gap:0.5rem; align-items: center;">
-    <label>
-        Từ ngày:
-        <input type="date" name="start_date" value="{{ request.GET.start_date }}" required>
-    </label>
-    <label>
-        Đến ngày:
-        <input type="date" name="end_date" value="{{ request.GET.end_date }}" required>
-    </label>
-    <button type="submit">Xuất Excel</button>
-</form>
-<form method="get" action="{% url 'extract_revenue_report_excel' %}" class="export-form" style="margin: 1rem 0; display:flex; gap:0.5rem; align-items: center;">
-    <button type="submit" name="today" value="1">Xuất hôm nay</button>
-</form>
+<div style="margin: 1rem 0; display: inline-flex; gap: 1rem; align-items: center;">
+    <form method="get" action="{% url 'admin_transactions' %}" class="filter-form" style="display:flex; gap:0.5rem; align-items: center;">
+        <label>
+            Từ ngày:
+            <input type="date" name="start_date" value="{{ start_date }}" />
+        </label>
+        <label>
+            Đến ngày:
+            <input type="date" name="end_date" value="{{ end_date }}" />
+        </label>
+        <button type="submit">Lọc</button>
+        <button type="submit" formaction="{% url 'extract_revenue_report_excel' %}">Xuất Excel</button>
+    </form>
+    <form method="get" action="{% url 'extract_revenue_report_excel' %}" class="export-form" style="display:flex; gap:0.5rem; align-items: center;">
+        <button type="submit" name="today" value="1">Xuất hôm nay</button>
+    </form>
 </div>
 
 
