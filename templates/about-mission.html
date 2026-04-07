@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    } */
+
+    .news-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .article-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .article-card img {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .article-info {
+        padding: 20px;
+    }
+
+    .article-info h3 {
+        margin-top: 0;
+    }
+    .top-img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .top-img-container img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+</style>
+
+
+<div class="container">
+    <div class="top-img-container">
+        <img src="{% static 'img/mission/top.jpg' %}" alt="Mission Image">
+    </div>
+    <div class="news-container">
+        <div class="article-card">
+            <img src="">
+            <div class="article-info">
+                
+            </div>
+        </div>
+    </div>
+    <div class="news-container">
+        <div class="article-card">
+            <img src="">
+            <div class="article-info">
+                
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+{% endblock %}

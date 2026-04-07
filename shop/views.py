@@ -23,6 +23,9 @@ def about_news(request):
 def about_articles(request):
     return render(request, 'about-articles.html')
 
+def about_mission(request):
+    return render(request, 'about-mission.html')
+
 def index(request):
     products = Product.objects.all()
     transaction_count = Transaction.objects.count()
@@ -147,7 +150,10 @@ def payment(request):
 
 from django.contrib.auth.decorators import user_passes_test
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
+@user_passes_test(is_admin)
 def admin_transactions(request):
     # Simple admin view to confirm transactions
     
@@ -186,7 +192,7 @@ def admin_transactions(request):
         'current_period': period
         })
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def revert_transaction(request, transaction_id):
     if request.method == 'POST':
         transaction = get_object_or_404(Transaction, id=transaction_id)
@@ -195,7 +201,7 @@ def revert_transaction(request, transaction_id):
         messages.success(request, "Đã hoàn tác xác nhận đơn hàng.")
     return redirect('admin_transactions')
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def delete_transaction(request, transaction_id):
     if request.method == 'POST':
         transaction = get_object_or_404(Transaction, id=transaction_id)
@@ -212,7 +218,7 @@ def remove_from_cart(request, product_id):
         messages.success(request, "Đã xóa sản phẩm khỏi giỏ hàng.")
     return redirect('payment')
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def add_product(request):
     if request.method == 'POST':
         product_name = request.POST.get('product_name')
@@ -232,7 +238,7 @@ def add_product(request):
 
     return render(request, 'add_product.html')
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def edit_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -247,12 +253,12 @@ def edit_product(request, pk):
 
     return render(request, 'edit_product.html', {'product': product})
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def admin_products(request):
     products = Product.objects.all()
     return render(request, 'admin_products.html', {'products': products})
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     if request.method == 'POST':
@@ -262,7 +268,7 @@ def delete_product(request, pk):
     # Redirect to product list if not a POST request
     return redirect('admin_products')
 
-@user_passes_test(lambda u: u.is_authenticated and u.is_superuser)
+@user_passes_test(is_admin)
 def extract_revenue_report_excel(request):
     import openpyxl
     from django.http import HttpResponse
