@@ -7,6 +7,15 @@ from django.utils import timezone
 from django.utils.dateparse import parse_date
 import openpyxl
 from django.http import HttpResponse
+from django.contrib.auth.decorators import user_passes_test
+
+
+def number_with_commas(value):
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        return value
+    return "{:,}".format(value)
 
 def about(request):
     transaction_count = Transaction.objects.count()
@@ -40,19 +49,32 @@ def index(request):
 
     show_promo = transaction_count <= 100
     products_with_discount = []
+    
     if show_promo:
         for product in products:
             products_with_discount.append({
-                'product': product,
-                'discounted_price': product.price * 0.7
+                'product': {
+                    'pk': product.id,
+                    'product_name': product.product_name,
+                    'price': number_with_commas(product.price),
+                    'description': product.description,
+                    'image': product.image
+                },
+                'discounted_price': number_with_commas(round(product.price * 0.7, 0))
             })
     else:
         for product in products:
             products_with_discount.append({
-                'product': product,
+                'product': {
+                    'pk': product.id,
+                    'product_name': product.product_name,
+                    'price': number_with_commas(product.price),
+                    'description': product.description,
+                    'image': product.image
+                },
                 'discounted_price': None
             })
-
+    print(products_with_discount[0])
     return render(request, 'index.html', {
         'products_with_discount': products_with_discount, 
         'show_promo_popup': show_promo_popup,
@@ -66,7 +88,7 @@ def product_detail(request, pk):
     
     discounted_price = None
     if show_promo:
-        discounted_price = product.price * 0.7
+        discounted_price = round(product.price * 0.7, 0)
 
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
@@ -83,9 +105,15 @@ def product_detail(request, pk):
         return redirect('index')
         
     return render(request, 'product_detail.html', {
-        'product': product,
+        'product': {
+                    'id': product.id,
+                    'product_name': product.product_name,
+                    'price': number_with_commas(product.price),
+                    'description': product.description,
+                    'image': product.image
+                },
         'show_promo': show_promo,
-        'discounted_price': discounted_price
+        'discounted_price': number_with_commas(discounted_price)
     })
 
 def payment(request):
@@ -113,13 +141,13 @@ def payment(request):
             item = {
                 'product': product,
                 'quantity': quantity,
-                'total': total,
+                'total': number_with_commas(total),
                 'discounted_total': None
             }
             
             if show_promo:
-                discounted_total = total * 0.7
-                item['discounted_total'] = discounted_total
+                discounted_total = round(total * 0.7, 0)
+                item['discounted_total'] = number_with_commas(discounted_total)
                 total_discounted_price += discounted_total
             
             cart_items.append(item)
@@ -146,12 +174,10 @@ def payment(request):
 
     return render(request, 'payment.html', {
         'cart_items': cart_items,
-        'total_price': total_price,
-        'total_discounted_price': total_discounted_price if show_promo else None,
+        'total_price': number_with_commas(total_price),
+        'total_discounted_price': number_with_commas(total_discounted_price) if show_promo else None,
         'show_promo': show_promo
     })
-
-from django.contrib.auth.decorators import user_passes_test
 
 def is_admin(user):
     return user.is_authenticated and user.is_superuser
@@ -207,7 +233,7 @@ def admin_transactions(request):
     
     return render(request, 'admin_transactions.html', {
         'transactions': transactions,
-        'total_revenue': total_revenue,
+        'total_revenue': number_with_commas(total_revenue),
         'current_period': period,
         'start_date': start_date,
         'end_date': end_date
@@ -277,7 +303,17 @@ def edit_product(request, pk):
 @user_passes_test(is_admin)
 def admin_products(request):
     products = Product.objects.all()
-    return render(request, 'admin_products.html', {'products': products})
+
+
+    return render(request, 'admin_products.html', {'products': [
+        {
+            'pk': product.id,
+            'product_name': product.product_name,
+            'price': number_with_commas(product.price),
+            'description': product.description,
+            'image': product.image
+        } for product in products
+    ]})
 
 @user_passes_test(is_admin)
 def delete_product(request, pk):
@@ -345,12 +381,12 @@ def extract_revenue_report_excel(request):
             local_created_at.strftime('%d/%m/%Y %H:%M'),
             transaction.phone_number,
             products_list,
-            transaction.revenue,
+            number_with_commas(transaction.revenue),
         ])
 
         total_revenue += transaction.revenue or 0
 
-    sheet.append(['', '', '', 'Tổng doanh thu', total_revenue])
+    sheet.append(['', '', '', 'Tổng doanh thu', number_with_commas(total_revenue)])
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     file_name = f'doanh_thu_{start_date}_{end_date}.xlsx'

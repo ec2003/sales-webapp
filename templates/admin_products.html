@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-5">
@@ -25,7 +26,7 @@
                     {% endif %}
                 </td>
                 <td>{{ product.product_name }}</td>
-                <td>{{ product.price|floatformat:0 }} VND</td>
+                <td>{{ product.price }} VND</td>
                 <td>
                     
                     <button type="submit"><a href="{% url 'edit_product' product.pk %}" class="btn btn-sm btn-info">Sửa</a></button>

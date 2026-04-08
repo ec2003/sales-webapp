@@ -26,9 +26,9 @@
                     <td>{{ item.quantity }}</td>
                     <td>
                         {% if show_promo and item.discounted_total is not None %}
-                            <span style="text-decoration: line-through;">{{ item.total|floatformat:0 }} VND</span> <span style="color: red;">{{ item.discounted_total|floatformat:0 }} VND</span>
+                            <span style="text-decoration: line-through;">{{ item.total }} VND</span> <span style="color: red;">{{ item.discounted_total }} VND</span>
                         {% else %}
-                            {{ item.total|floatformat:0 }} VND
+                            {{ item.total }} VND
                         {% endif %}
                     </td>
                     <td>
@@ -38,9 +38,9 @@
                 {% endfor %}
             </table>
             {% if show_promo and total_discounted_price is not None %}
-                <p class="total"><strong>Tổng cộng: <span style="text-decoration: line-through;">{{ total_price|floatformat:0 }} VND</span> <span style="color: red;">{{ total_discounted_price|floatformat:0 }} VND</span></strong></p>
+                <p class="total"><strong>Tổng cộng: <span style="text-decoration: line-through;">{{ total_price }} VND</span> <span style="color: red;">{{ total_discounted_price }} VND</span></strong></p>
             {% else %}
-                <p class="total"><strong>Tổng cộng: {{ total_price|floatformat:0 }} VND</strong></p>
+                <p class="total"><strong>Tổng cộng: {{ total_price }} VND</strong></p>
             {% endif %}
             
             <form method="post" class="payment-form">

@@ -11,9 +11,9 @@
     <div class="product-info">
         <h1>{{ product.product_name }}</h1>
         {% if show_promo and discounted_price %}
-            <p class="price"><span style="text-decoration: line-through;">{{ product.price|floatformat:0 }} VND</span> <span style="color: red;">{{ discounted_price|floatformat:0 }} VND</span></p>
+            <p class="price"><span style="text-decoration: line-through;">{{ product.price }} VND</span> <span style="color: red;">{{ discounted_price }} VND</span></p>
         {% else %}
-            <p class="price">{{ product.price|floatformat:0 }} VND</p>
+            <p class="price">{{ product.price }} VND</p>
         {% endif %}
         
         {% if product.description %}
